@@ -117,7 +117,7 @@ pair<double, double> CI(float CI, const char *poiname="N_{#Upsilon(3S)}")
    FeldmanCousins fc(*data,modelConfig);
    // fc.SetTestSize(1-CI);
    fc.SetConfidenceLevel(CI); // 95% interval
-   fc.AdditionalNToysFactor(0.2); // to speed up the result 
+   fc.AdditionalNToysFactor(0.2); // to speed up the result. Basically N toys = 1000 by default, so with 0.2 it will do 200 toys per test value of the POI.
    //  fc.UseAdaptiveSampling(true); // speed it up a bit, but don't use for expectd limits
    fc.SetNBins(50);
    fc.CreateConfBelt(true); // save the information in the belt for plotting
