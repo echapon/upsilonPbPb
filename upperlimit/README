@@ -1,0 +1,26 @@
+How to use PoD, PROOF on Demand, with lxplus?
+
+A good tutorial is available at https://agenda.infn.it/getFile.py/access?resId=10&materialId=slides&confId=4933
+
+However, I had to change a few things with respect to this tutorial.
+
+- Here are the versions of the software that I chose:
+  - PoD: 3.16
+  - ROOT: source /afs/cern.ch/sw/lcg/app/releases/ROOT/5.34.21/x86_64-slc6-gcc48-opt/root/bin/thisroot.sh 
+  - GCC: source /afs/cern.ch/sw/lcg/contrib/gcc/4.8.1/x86_64-slc6-gcc48-opt/setup.sh 
+  - XROOTD: source $ROOTSYS/bin/setxrd.sh /afs/cern.ch/sw/lcg/external/xrootd/3.2.7/x86_64-slc6-gcc48-opt/
+- create a file $HOME/.PoD/etc/user_worker_env.sh, containing the three "source" commands above. The same file 
+should be copied to $HOME/.PoD and $POD_LOCATION/etc (probably not all are needed, but well)
+- these three "source" commands should also be added at the end of ~/PoD/3.16/PoD_env.sh
+- In $USER/.PoD/PoD.cfg, under [server], replace "work_dir=$HOME/.PoD" with "work_dir=/tmp/$USER"
+
+Once PoD is setup correctly, one needs to do the following:
+- source ~/PoD/3.16/PoD_env.sh
+- pod-server start
+- pod-submit -r lsf -q 1nh -n 100 # submitting 100 workers to the 1h queue
+- # work with ROOT...
+- pod-server stop
+
+I guess you can submit more workers. Also, choose the LSF queue depending on what you want to do. In the 
+RooStats::ProofConfig constructor, I think you can set the number of workers to much more than what was put
+in the pod-submit command, because you have several cores per node!
