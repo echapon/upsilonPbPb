@@ -18,7 +18,11 @@ Once PoD is setup correctly, one needs to do the following:
 - source ~/PoD/3.16/PoD_env.sh
 - pod-server start
 - pod-submit -r lsf -q 1nh -n 100 # submitting 100 workers to the 1h queue
-- # work with ROOT...
+- # work with ROOT... e.g.:
+  - root -l -b
+  - .L CI.C+
+  - CI(0.95,"N_{#Upsilon(3S)}")
+  - .q
 - pod-server stop
 
 I guess you can submit more workers. Also, choose the LSF queue depending on what you want to do. In the 
