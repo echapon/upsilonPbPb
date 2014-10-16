@@ -1,4 +1,4 @@
-.__afs0B55
-CI_C.d
-CI_C.so
+.__afs*
+*.d
+*.so
 ULtest.pdf
