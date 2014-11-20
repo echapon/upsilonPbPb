@@ -73,8 +73,8 @@ bool noSystematics = false;              // force all systematics to be off (i.e
 double nToysRatio = 2;                   // ratio Ntoys S+b/ntoysB
 double maxPOI = -1;                      // max value used of POI (in case of auto scan) 
 bool useProof = true;                    // use Proof Light when using toys (for freq or hybrid)
-int nworkers = 3;                        // number of worker for Proof
-const char* proofstring = "";            // config string for Proof
+int nworkers = 200;                      // number of worker for Proof
+TString proofstring = gSystem->GetFromPipe("pod-info -c"); // config string for Proof
 bool rebuild = false;                    // re-do extra toys for computing expected limits and rebuild test stat
                                          // distributions (N.B this requires much more CPU (factor is equivalent to nToyToRebuild)
 int nToyToRebuild = 100;                 // number of toys used to rebuild 
@@ -504,6 +504,9 @@ RooStats::HypoTestInvTool::AnalyzeResult( HypoTestInverterResult * r,
    //    plot->Draw("CLb 2CL");  // plot all and Clb
    // else 
    //    plot->Draw("");  // plot all and Clb
+
+   // save plots
+   c1->SaveAs("c1.pdf");
   
    const int nEntries = r->ArraySize();
   
@@ -521,6 +524,8 @@ RooStats::HypoTestInvTool::AnalyzeResult( HypoTestInverterResult * r,
          pl->SetLogYaxis(true);
          pl->Draw();
       }
+      // save plots
+      c2->SaveAs("c2.pdf");
    }
 }
 

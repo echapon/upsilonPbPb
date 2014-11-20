@@ -58,9 +58,6 @@ void runStandardHypoTestInvDemo(const char *poiname)
    theObs = ws->var("invariantMass");
    RooArgSet observable(*theObs);
    modelConfig.SetObservables(observable);
-   cout << "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP" << endl;
-   modelConfig.Print();
-   cout << "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP" << endl;
    /////////////////////////////////////////////////////////////
    // Now get the POI for convenience
    // you may want to adjust the range of your POI
@@ -100,7 +97,7 @@ void runStandardHypoTestInvDemo(const char *poiname)
          calculatorType,
          testStatType, 
          useCLs,  
-         20,   
+         10,   
          0,  
          150., 
          1000,
