@@ -70,10 +70,10 @@ bool useVectorStore = true;              // convert data to use new roofit data 
 bool generateBinned = false;             // generate binned data sets 
 bool noSystematics = false;              // force all systematics to be off (i.e. set all nuisance parameters as constat
                                          // to their nominal values)
-double nToysRatio = 2;                   // ratio Ntoys S+b/ntoysB
+double nToysRatio = .2;                   // ratio Ntoys S+b/ntoysB
 double maxPOI = -1;                      // max value used of POI (in case of auto scan) 
 bool useProof = true;                    // use Proof Light when using toys (for freq or hybrid)
-int nworkers = 200;                      // number of worker for Proof
+int nworkers = 100;                      // number of worker for Proof
 TString proofstring = gSystem->GetFromPipe("pod-info -c"); // config string for Proof
 bool rebuild = false;                    // re-do extra toys for computing expected limits and rebuild test stat
                                          // distributions (N.B this requires much more CPU (factor is equivalent to nToyToRebuild)
@@ -507,6 +507,7 @@ RooStats::HypoTestInvTool::AnalyzeResult( HypoTestInverterResult * r,
 
    // save plots
    c1->SaveAs("c1.pdf");
+   c1->SaveAs("c1.root");
   
    const int nEntries = r->ArraySize();
   
@@ -526,6 +527,7 @@ RooStats::HypoTestInvTool::AnalyzeResult( HypoTestInverterResult * r,
       }
       // save plots
       c2->SaveAs("c2.pdf");
+      c2->SaveAs("c2.root");
    }
 }
 
@@ -586,6 +588,8 @@ RooStats::HypoTestInvTool::RunInverter(RooWorkspace * w,
       Info("StandardHypoTestInvDemo","Model %i has no snapshot  - make one using model poi",modelSBName);
       sbModel->SetSnapshot( *sbModel->GetParametersOfInterest() );
    }
+
+   cout << "observables: " << sbModel->GetObservables()->getSize() << endl;
   
    // case of no systematics
    // remove nuisance parameters from model
@@ -610,6 +614,7 @@ RooStats::HypoTestInvTool::RunInverter(RooWorkspace * w,
       RooRealVar * var = dynamic_cast<RooRealVar*>(bModel->GetParametersOfInterest()->first());
       if (!var) return 0;
       double oldval = var->getVal();
+      var->setMin(0);
       var->setVal(0);
       bModel->SetSnapshot( RooArgSet(*var)  );
       var->setVal(oldval);
@@ -902,6 +907,7 @@ RooStats::HypoTestInvTool::RunInverter(RooWorkspace * w,
   
    // can speed up using proof-lite
    if (mUseProof && mNWorkers > 1) { 
+      cout << "ProofConfig pc(*w, " << mNWorkers <<", " << proofstring << ", kFALSE);" << endl;
       ProofConfig pc(*w, mNWorkers, proofstring, kFALSE);
       toymcs->SetProofConfig(&pc);    // enable proof
    }
