@@ -70,7 +70,7 @@ bool useVectorStore = true;              // convert data to use new roofit data 
 bool generateBinned = false;             // generate binned data sets 
 bool noSystematics = false;              // force all systematics to be off (i.e. set all nuisance parameters as constat
                                          // to their nominal values)
-double nToysRatio = .2;                   // ratio Ntoys S+b/ntoysB
+double nToysRatio = 2;                   // ratio Ntoys S+b/ntoysB
 double maxPOI = -1;                      // max value used of POI (in case of auto scan) 
 bool useProof = true;                    // use Proof Light when using toys (for freq or hybrid)
 int nworkers = 100;                      // number of worker for Proof
