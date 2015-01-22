@@ -73,8 +73,8 @@ bool noSystematics = false;              // force all systematics to be off (i.e
 double nToysRatio = 2;                   // ratio Ntoys S+b/ntoysB
 double maxPOI = -1;                      // max value used of POI (in case of auto scan) 
 bool useProof = true;                    // use Proof Light when using toys (for freq or hybrid)
-int nworkers = 100;                      // number of worker for Proof
-TString proofstring = gSystem->GetFromPipe("pod-info -c"); // config string for Proof
+int nworkers = 3;//100;                      // number of worker for Proof
+TString proofstring = "";//gSystem->GetFromPipe("pod-info -c"); // config string for Proof
 bool rebuild = false;                    // re-do extra toys for computing expected limits and rebuild test stat
                                          // distributions (N.B this requires much more CPU (factor is equivalent to nToyToRebuild)
 int nToyToRebuild = 100;                 // number of toys used to rebuild 
