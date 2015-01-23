@@ -288,9 +288,20 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
 
    // ws->Print();
    /////////////////////////////////////////////////////////////////////
-   RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data );
+   RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data,NumCPU(2) );
+   RooMinuit(*pNll).migrad(); // minimize likelihood wrt all parameters before making plots
+   RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.2),Title("LL and profileLL in raa3"));
+   pNll->plotOn(framepoi,ShiftToZero());
+   
    RooAbsReal * pProfile = pNll->createProfile( globalObs ); // do not profile global observables
    pProfile->getVal(); // this will do fit and set POI and nuisance parameters to fitted values
+   pProfile->plotOn(framepoi,LineColor(kRed));
+   framepoi->SetMinimum(0);
+   framepoi->SetMaximum(3);
+   TCanvas *cpoi = new TCanvas();
+   cpoi->cd(); framepoi->Draw();
+   cpoi->SaveAs("cpoi.pdf");
+
    RooArgSet * pPoiAndNuisance = new RooArgSet("poiAndNuisance");
    // pPoiAndNuisance->add(*sbHypo.GetNuisanceParameters());
    // pPoiAndNuisance->add(*sbHypo.GetParametersOfInterest());
@@ -315,7 +326,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    RooStats::ModelConfig bHypo = sbHypo;
    bHypo.SetName("BHypo");
    bHypo.SetWorkspace(*ws);
-   pNll = bHypo.GetPdf()->createNLL( *data );
+   pNll = bHypo.GetPdf()->createNLL( *data,NumCPU(2) );
    RooArgSet poiAndGlobalObs("poiAndGlobalObs");
    poiAndGlobalObs.add( poi );
    poiAndGlobalObs.add( globalObs );
