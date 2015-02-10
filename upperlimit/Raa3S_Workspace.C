@@ -59,13 +59,13 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    //pp Luminosities, Taa and efficiency ratios Systematics
 
    ws->factory( "Taa_hi[5.662e-9]" );
-   ws->factory( "Taa_kappa[1.057]" );
+   ws->factory( "Taa_kappa[1.062]" ); // was 1.057
    ws->factory( "expr::alpha_Taa('pow(Taa_kappa,beta_Taa)',Taa_kappa,beta_Taa[0,-5,5])" );
    ws->factory( "prod::Taa_nom(Taa_hi,alpha_Taa)" );
    ws->factory( "Gaussian::constr_Taa(beta_Taa,glob_Taa[0,-5,5],1)" );
 
    ws->factory( "lumipp_hi[5.4]" );
-   ws->factory( "lumipp_kappa[1.06]" );
+   ws->factory( "lumipp_kappa[1.037]" ); // was 1.06
    ws->factory( "expr::alpha_lumipp('pow(lumipp_kappa,beta_lumipp)',lumipp_kappa,beta_lumipp[0,-5,5])" );
    ws->factory( "prod::lumipp_nom(lumipp_hi,alpha_lumipp)" );
    ws->factory( "Gaussian::constr_lumipp(beta_lumipp,glob_lumipp[0,-5,5],1)" );

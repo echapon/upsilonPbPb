@@ -83,7 +83,7 @@ void runLimit_Raa3S_Workspace(const char *poiname, const char *pdfname, const ch
    //
 
    // 0,3,true for frequentist CLs; 2,3,true for asymptotic CLs; 0,2,false for FC
-   int calculatorType = 2;
+   int calculatorType = 0;
    int testStatType = 2;
    bool useCLs = false;
    // root> StandardHypoTestInvDemo("fileName","workspace name","S+B modelconfig name","B model name","data set name",calculator type, test statistic type, use CLS, 
