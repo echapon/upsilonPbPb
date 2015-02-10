@@ -253,7 +253,7 @@ RooStats::HypoTestInvTool::SetParameter(const char * name, const char * value){
 
 
 
-void 
+pair<double,double>
 StandardHypoTestInvDemo(const char * infile = 0,
                         const char * wsName = "combined",
                         ModelConfig * modelSBName = 0,
@@ -402,10 +402,12 @@ StandardHypoTestInvDemo(const char * infile = 0,
          return; 
       }
    }		
+
+   pair<double,double> lims;
   
-   calc.AnalyzeResult( r, calculatorType, testStatType, useCLs, npoints, infile );
+   calc.AnalyzeResult( r, calculatorType, testStatType, useCLs, npoints, infile, &lims );
   
-   return;
+   return lims;
 }
 
 
@@ -416,7 +418,8 @@ RooStats::HypoTestInvTool::AnalyzeResult( HypoTestInverterResult * r,
                                           int testStatType, 
                                           bool useCLs,  
                                           int npoints,
-                                          const char * fileNameBase ){
+                                          const char * fileNameBase,
+                                          pair<double,double> * lims){
 
    // analyze result produced by the inverter, optionally save it in a file 
    
@@ -441,6 +444,9 @@ RooStats::HypoTestInvTool::AnalyzeResult( HypoTestInverterResult * r,
    if (lowerLimit < upperLimit*(1.- 1.E-4) && lowerLimit != 0) 
       std::cout << "The computed lower limit is: " << lowerLimit << " +/- " << llError << std::endl;
    std::cout << "The computed upper limit is: " << upperLimit << " +/- " << ulError << std::endl;
+   
+   lims->first = lowerLimit;
+   lims->second = upperLimit;
   
 
    // compute expected limit
