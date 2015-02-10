@@ -13,8 +13,7 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    TFile *f = new TFile(filename) ;
 
    // Open text file to write results
-   TString ofname; ofname.Form("%s.results",filename);
-   ofstream of(ofname.Data());
+   ofstream of(results.txt);
 
    // Retrieve workspace from file
    RooWorkspace* ws = (RooWorkspace*) f->Get(wsname);
