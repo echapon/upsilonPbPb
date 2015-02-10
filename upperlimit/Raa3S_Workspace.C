@@ -29,15 +29,17 @@
 #include "TMath.h"
 #include "TF1.h"
 
+#include "test_combine.C"
+
 using namespace RooFit;
 using namespace RooStats;
 
-void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
+void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root", const char* name_out="fitresult_combo.root"){
 
-   TFile File(filename);
+   // TFile File(filename);
 
-   RooWorkspace * ws;
-   File.GetObject("wcombo", ws);
+   RooWorkspace * ws = test_combine(name_pbpb, name_pp);
+   // File.GetObject("wcombo", ws);
    // ws->Print();
    RooAbsData * data = ws->data("data");
 
@@ -239,7 +241,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    ws->var("vProb")->setConstant(true);
    ws->var("width_hi")->setConstant(true);
    ws->var("width_pp")->setConstant(true);
-   ws->var("x3raw")->setConstant(true);
+   // ws->var("x3raw")->setConstant(true);
    //  RooArgSet fixed_again("fixed_again");
    //  fixed_again.add( *ws->var("leftEdge") );
    //  fixed_again.add( *ws->var("rightEdge") );
@@ -359,7 +361,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    sbHypo.Print();
 
    // save workspace to file
-   ws -> SaveAs("TRIAL.root");
+   ws -> SaveAs(name_out);
 
    return;
 }
