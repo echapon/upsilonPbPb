@@ -13,7 +13,7 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    TFile *f = new TFile(filename) ;
 
    // Open text file to write results
-   ofstream of(results.txt);
+   ofstream of("results.txt");
 
    // Retrieve workspace from file
    RooWorkspace* ws = (RooWorkspace*) f->Get(wsname);
