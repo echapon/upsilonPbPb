@@ -71,8 +71,9 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    double poimin = 0.5*max((double) 0.,CnfdncIntrvl.first);
    double poimax = 1.5*CnfdncIntrvl.second;
    cout << "Will scan between " << poimin << " and " << poimax << endl;
-   firstPOI->setMin(poimin);
-   firstPOI->setMax(poimax);
+   // firstPOI->setMin(poimin);
+   // firstPOI->setMax(poimax);
+   cout << "POI defined between" << firstPOI->getMin() << " and " << firstPOI->getMax() << endl;
 
    // actually run the hypo test inverter
 
