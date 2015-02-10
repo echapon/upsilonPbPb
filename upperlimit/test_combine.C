@@ -1,9 +1,10 @@
 #include "functions.C"
 #include "RooGlobalFunc.h"
+#include "RooWorkspace.h"
 
-test_combine()
+RooWorkspace* test_combine(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root")
 {
-   const char *poiname="N_{#Upsilon(3S)}";
+   // const char *poiname="N_{#Upsilon(3S)}";
    TFile *f = new TFile("fitresult.root") ;
    TFile *f_pp = new TFile("fitresult_pp.root") ;
 
@@ -11,10 +12,11 @@ test_combine()
    RooWorkspace* ws = (RooWorkspace*) f->Get("ws");
    RooWorkspace* ws_pp = (RooWorkspace*) f_pp->Get("ws");
 
-   RooRealVar *theVar; RooDataSet *data; RooAbsPdf *pdf;
+   // RooRealVar *theVar; 
+   RooDataSet *data; RooAbsPdf *pdf;
    RooRealVar *theVar_pp; RooDataSet *data_pp; RooAbsPdf *pdf_pp;
 
-   theVar = ws->var(poiname);
+   // theVar = ws->var(poiname);
    // pdf = ws->pdf("pdf");
    data =(RooDataSet *) ws->data("data");
    pdf_pp = ws_pp->pdf("pdf");
@@ -76,15 +78,15 @@ test_combine()
    RooAddPdf *pdf_combinedbkgd = ws->pdf("bkgPdf");
    RooRealVar *nsig1f = ws->var("N_{#Upsilon(1S)}");
    RooRealVar *nsig2f = ws->var("N_{#Upsilon(2S)}");
-   RooRealVar *nsig3f_orig = ws->var("N_{#Upsilon(3S)}");
+   RooRealVar *nsig3f = ws->var("N_{#Upsilon(3S)}");
    RooRealVar *nbkgd = ws->var("n_{Bkgd}");
-   RooRealVar *x3raw = new RooRealVar("x3raw","x3raw",7e-4,-10,10);
-   RooRealVar *nsig3f_pp = ws_pp->var("N_{#Upsilon(3S)}"); nsig3f_pp->SetName("N_{#Upsilon(3S)}_pp");
-   RooFormulaVar *nsig3f_new = new RooFormulaVar("N_{#Upsilon(3S)}","@0*@1",RooArgList(*nsig3f_pp,*x3raw));
+   // RooRealVar *x3raw = new RooRealVar("x3raw","x3raw",7e-4,-10,10);
+   // RooRealVar *nsig3f_pp = ws_pp->var("N_{#Upsilon(3S)}"); nsig3f_pp->SetName("N_{#Upsilon(3S)}_pp");
+   // RooFormulaVar *nsig3f_new = new RooFormulaVar("N_{#Upsilon(3S)}","@0*@1",RooArgList(*nsig3f_pp,*x3raw));
 
    RooAbsPdf *pdf_new = new RooAddPdf ("pdf","new total p.d.f.",
          RooArgList(*sig1S,*sig2S,*sig3S,*pdf_combinedbkgd),
-         RooArgList(*nsig1f,*nsig2f,*nsig3f_new,*nbkgd));
+         RooArgList(*nsig1f,*nsig2f,*nsig3f,*nbkgd));
 	wcombo->import(*pdf_new, RooFit::RenameAllNodes("hi"),
 			RooFit::RenameAllVariablesExcept("hi", 
 				"npow,invariantMass,"
@@ -139,5 +141,6 @@ test_combine()
    wcombo->var("width_hi")->setConstant(true);
    wcombo->var("width_pp")->setConstant(true);
 
-   wcombo->writeToFile("fitresult_combo.root");
+   // wcombo->writeToFile("fitresult_combo.root");
+   return wcombo;
 }

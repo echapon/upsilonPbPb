@@ -29,16 +29,17 @@
 #include "TMath.h"
 #include "TF1.h"
 
+#include "test_combine.C"
+
 using namespace RooFit;
 using namespace RooStats;
 
-void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
+void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root", const char* name_out="fitresult_combo.root"){
 
-   TFile File(filename);
+   // TFile File(filename);
 
-   RooWorkspace * ws;
-   File.GetObject("wcombo", ws);
-   // ws->Print();
+   RooWorkspace * ws = test_combine(name_pbpb, name_pp);
+   // File.GetObject("wcombo", ws);
    RooAbsData * data = ws->data("data");
 
    // RooDataSet * US_data = (RooDataSet*) data->reduce( "QQsign == QQsign::PlusMinus");
@@ -49,12 +50,12 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    // ws->import(* hi_data);
    // hi_data->Print();
 
-   RooRealVar* raa3 = new RooRealVar("raa3","R_{AA}(#Upsilon (3S))",0.5,0,1);
+   RooRealVar* raa2 = new RooRealVar("raa2","R_{AA}(#Upsilon (2S))",0.5,0,1);
    RooRealVar* leftEdge = new RooRealVar("leftEdge","leftEdge",0);
    RooRealVar* rightEdge = new RooRealVar("rightEdge","rightEdge",1);
-   RooGenericPdf step("step", "step", "(@0 >= @1) && (@0 < @2)", RooArgList(*raa3, *leftEdge, *rightEdge));
+   RooGenericPdf step("step", "step", "(@0 >= @1) && (@0 < @2)", RooArgList(*raa2, *leftEdge, *rightEdge));
    ws->import(step);
-   ws->factory( "Uniform::flat(raa3)" );
+   ws->factory( "Uniform::flat(raa2)" );
 
    //pp Luminosities, Taa and efficiency ratios Systematics
 
@@ -72,13 +73,13 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
 
    // ws->factory( "effRat1[1]" );
    // ws->factory( "effRat2[1]" );
-   ws->factory( "effRat3_hi[0.95]" );
+   ws->factory( "effRat2_hi[0.95]" );
    ws->factory( "effRat_kappa[1.054]" );
    ws->factory( "expr::alpha_effRat('pow(effRat_kappa,beta_effRat)',effRat_kappa,beta_effRat[0,-5,5])" );
    // ws->factory( "prod::effRat1_nom(effRat1_hi,alpha_effRat)" );
    ws->factory( "Gaussian::constr_effRat(beta_effRat,glob_effRat[0,-5,5],1)" );
    // ws->factory( "prod::effRat2_nom(effRat2_hi,alpha_effRat)" );
-   ws->factory( "prod::effRat3_nom(effRat3_hi,alpha_effRat)" );
+   ws->factory( "prod::effRat2_nom(effRat2_hi,alpha_effRat)" );
    //  
    ws->factory("Nmb_hi[1.161e9]");
    ws->factory("prod::denominator(Taa_nom,Nmb_hi)");
@@ -91,16 +92,16 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    //  RooRealVar *raa2 = ws->var("raa2");
    //  RooRealVar* nsig2_pp = ws->var("nsig2_pp");
    //  RooRealVar* effRat2 = ws->function("effRat2_nom");
-   RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
-   cout << nsig3_pp << endl;
-   RooRealVar* effRat3 = ws->function("effRat3_nom");
+   RooRealVar* nsig2_pp = ws->var("N_{#Upsilon(2S)}_pp");
+   cout << nsig2_pp << endl;
+   RooRealVar* effRat2 = ws->function("effRat2_nom");
    //  
    //  RooFormulaVar nsig1_hi_modified("nsig1_hi_modified", "@0*@1*@3/@2", RooArgList(*raa1, *nsig1_pp, *lumiOverTaaNmbmodified, *effRat1));
    //  ws->import(nsig1_hi_modified);
    //  RooFormulaVar nsig2_hi_modified("nsig2_hi_modified", "@0*@1*@3/@2", RooArgList(*raa2, *nsig2_pp, *lumiOverTaaNmbmodified, *effRat2));
    //  ws->import(nsig2_hi_modified);
-   RooFormulaVar nsig3_hi_modified("nsig3_hi_modified", "@0*@1*@3/@2", RooArgList(*raa3, *nsig3_pp, *lumiOverTaaNmbmodified, *effRat3));
-   ws->import(nsig3_hi_modified);
+   RooFormulaVar nsig2_hi_modified("nsig2_hi_modified", "@0*@1*@3/@2", RooArgList(*raa2, *nsig2_pp, *lumiOverTaaNmbmodified, *effRat2));
+   ws->import(nsig2_hi_modified);
 
    //  // background yield with systematics
    ws->factory( "nbkg_hi_kappa[1.10]" );
@@ -112,9 +113,9 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    RooAbsPdf* sig3S_hi = ws->pdf("sig3S_hi");
    RooAbsPdf* LSBackground_hi = ws->pdf("nbkg_hi_nom");
    RooRealVar* nsig1_hi = ws->var("N_{#Upsilon(1S)}_hi");
-   RooRealVar* nsig2_hi = ws->var("N_{#Upsilon(2S)}_hi");
-   cout << nsig1_hi << " " << nsig2_hi << " " << nsig3_pp << endl;
-   RooFormulaVar* nsig3_hi = ws->function("nsig3_hi_modified");
+   RooRealVar* nsig3_hi = ws->var("N_{#Upsilon(3S)}_hi");
+   cout << nsig1_hi << " " << nsig3_hi << " " << nsig2_pp << endl;
+   RooFormulaVar* nsig2_hi = ws->function("nsig2_hi_modified");
    RooRealVar* norm_nbkg_hi = ws->var("n_{Bkgd}_hi");
 
    RooArgList pdfs_hi( *sig1S_hi,*sig2S_hi,*sig3S_hi, *LSBackground_hi);
@@ -131,8 +132,8 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    RooAbsPdf* sig3S_pp = ws->pdf("sig3S_pp");
    RooAbsPdf* LSBackground_pp = ws->pdf("nbkg_pp_nom");
    RooRealVar* nsig1_pp = ws->var("N_{#Upsilon(1S)}_pp");
-   RooRealVar* nsig2_pp = ws->var("N_{#Upsilon(2S)}_pp");
-   // RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
+   // RooRealVar* nsig2_pp = ws->var("N_{#Upsilon(2S)}_pp");
+   RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
    RooRealVar* norm_nbkg_pp = ws->var("n_{Bkgd}_pp");
 
    RooArgList pdfs_pp( *sig1S_pp,*sig2S_pp,*sig3S_pp, *LSBackground_pp);
@@ -171,7 +172,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    // ws->Print();
 
    RooArgSet poi("poi");
-   poi.add( *ws->var("raa3") );
+   poi.add( *ws->var("raa2") );
 
 
 
@@ -192,7 +193,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    ws->var("Centrality")->setConstant(true);
    ws->var("N_{#Upsilon(1S)}_hi")->setConstant(true);
    ws->var("N_{#Upsilon(1S)}_pp")->setConstant(true);
-   ws->var("N_{#Upsilon(2S)}_hi")->setConstant(true);
+   ws->var("N_{#Upsilon(3S)}_hi")->setConstant(true);
    ws->var("N_{#Upsilon(2S)}_pp")->setConstant(true);
    ws->var("N_{#Upsilon(3S)}_pp")->setConstant(true);
    ws->var("Nmb_hi")->setConstant(true);
@@ -207,7 +208,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    // ws->var("dataCat")->setConstant(true);
    ws->var("decay_hi")->setConstant(true);
    ws->var("decay_pp")->setConstant(true);
-   ws->var("effRat3_hi")->setConstant(true);
+   ws->var("effRat2_hi")->setConstant(true);
    ws->var("effRat_kappa")->setConstant(true);
    // ws->var("glob_Taa")->setConstant(true);
    // ws->var("glob_effRat")->setConstant(true);
@@ -227,7 +228,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    ws->var("nbkg_hi_kappa")->setConstant(true);
    ws->var("nbkg_pp_kappa")->setConstant(true);
    ws->var("npow")->setConstant(true);
-   ws->var("N_{#Upsilon(3S)}_pp")->setConstant(true);
+   ws->var("N_{#Upsilon(2S)}_pp")->setConstant(true);
    // ws->var("raa3")->setConstant(true);
    ws->var("rightEdge")->setConstant(true);
    ws->var("sigmaFraction_hi")->setConstant(true);
@@ -239,7 +240,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    ws->var("vProb")->setConstant(true);
    ws->var("width_hi")->setConstant(true);
    ws->var("width_pp")->setConstant(true);
-   ws->var("x3raw")->setConstant(true);
+   // ws->var("x2raw")->setConstant(true);
    //  RooArgSet fixed_again("fixed_again");
    //  fixed_again.add( *ws->var("leftEdge") );
    //  fixed_again.add( *ws->var("rightEdge") );
@@ -290,7 +291,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    /////////////////////////////////////////////////////////////////////
    RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data,NumCPU(2) );
    RooMinuit(*pNll).migrad(); // minimize likelihood wrt all parameters before making plots
-   RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.2),Title("LL and profileLL in raa3"));
+   RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.2),Title("LL and profileLL in raa2"));
    pNll->plotOn(framepoi,ShiftToZero());
    
    RooAbsReal * pProfile = pNll->createProfile( globalObs ); // do not profile global observables
@@ -331,7 +332,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    poiAndGlobalObs.add( poi );
    poiAndGlobalObs.add( globalObs );
    pProfile = pNll->createProfile( poiAndGlobalObs ); // do not profile POI and global observables
-   ((RooRealVar *)poi.first())->setVal( 0 );  // set raa3=0 here
+   ((RooRealVar *)poi.first())->setVal( 0 );  // set raa2=0 here
    pProfile->getVal(); // this will do fit and set nuisance parameters to profiled values
    pPoiAndNuisance = new RooArgSet( "poiAndNuisance" );
    pPoiAndNuisance->add( nuis );
@@ -359,7 +360,7 @@ void Raa3S_Workspace(const char* filename="fitresult_combo_nofixed.root"){
    sbHypo.Print();
 
    // save workspace to file
-   ws -> SaveAs("TRIAL.root");
+   ws -> SaveAs(name_out);
 
    return;
 }
