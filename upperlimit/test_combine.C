@@ -5,8 +5,8 @@
 RooWorkspace* test_combine(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root")
 {
    // const char *poiname="N_{#Upsilon(3S)}";
-   TFile *f = new TFile("fitresult.root") ;
-   TFile *f_pp = new TFile("fitresult_pp.root") ;
+   TFile *f = new TFile(name_pbpb) ;
+   TFile *f_pp = new TFile(name_pp) ;
 
    // Retrieve workspace from file
    RooWorkspace* ws = (RooWorkspace*) f->Get("ws");
