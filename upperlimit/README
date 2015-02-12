@@ -1,3 +1,11 @@
+How to use this code?
+For the 2S:
+- first run run_2S_ws.sh to make the workspaces with combined pp-pbpb
+- then run run_2S_limit.sh to make the limits. To be ran on LLR's polui01 to benefit from the 32 cores (see nworkers = 25 in StandardHypoTestInvDemo.c)
+
+
+
+
 How to use PoD, PROOF on Demand, with lxplus?
 
 A good tutorial is available at https://agenda.infn.it/getFile.py/access?resId=10&materialId=slides&confId=4933
