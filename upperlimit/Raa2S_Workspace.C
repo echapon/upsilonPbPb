@@ -50,7 +50,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    // ws->import(* hi_data);
    // hi_data->Print();
 
-   RooRealVar* raa2 = new RooRealVar("raa2","R_{AA}(#Upsilon (2S))",0.5,0,1);
+   RooRealVar* raa2 = new RooRealVar("raa2","R_{AA}(#Upsilon (2S))",0.5,-1.,1);
    RooRealVar* leftEdge = new RooRealVar("leftEdge","leftEdge",0);
    RooRealVar* rightEdge = new RooRealVar("rightEdge","rightEdge",1);
    RooGenericPdf step("step", "step", "(@0 >= @1) && (@0 < @2)", RooArgList(*raa2, *leftEdge, *rightEdge));
@@ -73,13 +73,22 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
 
    // ws->factory( "effRat1[1]" );
    // ws->factory( "effRat2[1]" );
-   ws->factory( "effRat2_hi[0.95]" );
+   double effRat2value=0.953; // default value from MB
+   // what is the value of the efficiency ratio? try to guess from the input file name
+   string sfname(name_pbpb);
+   if (sfname.find("dimuPt0005000_dimuY000120")!=string::npos) effRat2value=0.919;
+   else if (sfname.find("dimuPt000500_dimuY000240")!=string::npos) effRat2value=0.941;
+   else if (sfname.find("dimuPt5001200_dimuY000240")!=string::npos) effRat2value=0.973;
+   else if (sfname.find("dimuPt0005000_dimuY120240")!=string::npos) effRat2value=1.;
+   else if (sfname.find("dimuPt12002000_dimuY000240")!=string::npos) effRat2value=0.994;
+
+   ws->factory( Form("effRat2_hi[%f]",effRat2value) );
    ws->factory( "effRat_kappa[1.054]" );
    ws->factory( "expr::alpha_effRat('pow(effRat_kappa,beta_effRat)',effRat_kappa,beta_effRat[0,-5,5])" );
    // ws->factory( "prod::effRat1_nom(effRat1_hi,alpha_effRat)" );
    ws->factory( "Gaussian::constr_effRat(beta_effRat,glob_effRat[0,-5,5],1)" );
-   // ws->factory( "prod::effRat2_nom(effRat2_hi,alpha_effRat)" );
    ws->factory( "prod::effRat2_nom(effRat2_hi,alpha_effRat)" );
+   // ws->factory( "prod::effRat3_nom(effRat3_hi,alpha_effRat)" );
    //  
    ws->factory("Nmb_hi[1.161e9]");
    ws->factory("prod::denominator(Taa_nom,Nmb_hi)");
@@ -113,9 +122,9 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    RooAbsPdf* sig3S_hi = ws->pdf("sig3S_hi");
    RooAbsPdf* LSBackground_hi = ws->pdf("nbkg_hi_nom");
    RooRealVar* nsig1_hi = ws->var("N_{#Upsilon(1S)}_hi");
+   RooFormulaVar* nsig2_hi = ws->function("nsig2_hi_modified");
    RooRealVar* nsig3_hi = ws->var("N_{#Upsilon(3S)}_hi");
    cout << nsig1_hi << " " << nsig3_hi << " " << nsig2_pp << endl;
-   RooFormulaVar* nsig2_hi = ws->function("nsig2_hi_modified");
    RooRealVar* norm_nbkg_hi = ws->var("n_{Bkgd}_hi");
 
    RooArgList pdfs_hi( *sig1S_hi,*sig2S_hi,*sig3S_hi, *LSBackground_hi);
@@ -228,7 +237,6 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    ws->var("nbkg_hi_kappa")->setConstant(true);
    ws->var("nbkg_pp_kappa")->setConstant(true);
    ws->var("npow")->setConstant(true);
-   ws->var("N_{#Upsilon(2S)}_pp")->setConstant(true);
    // ws->var("raa3")->setConstant(true);
    ws->var("rightEdge")->setConstant(true);
    ws->var("sigmaFraction_hi")->setConstant(true);
@@ -303,6 +311,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    cpoi->cd(); framepoi->Draw();
    cpoi->SaveAs("cpoi.pdf");
 
+   ((RooRealVar *)poi.first())->setMin(0.);
    RooArgSet * pPoiAndNuisance = new RooArgSet("poiAndNuisance");
    // pPoiAndNuisance->add(*sbHypo.GetNuisanceParameters());
    // pPoiAndNuisance->add(*sbHypo.GetParametersOfInterest());

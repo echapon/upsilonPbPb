@@ -51,7 +51,7 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    // ws->import(* hi_data);
    // hi_data->Print();
 
-   RooRealVar* raa3 = new RooRealVar("raa3","R_{AA}(#Upsilon (3S))",0.5,0,1);
+   RooRealVar* raa3 = new RooRealVar("raa3","R_{AA}(#Upsilon (3S))",0.5,-1,1);
    RooRealVar* leftEdge = new RooRealVar("leftEdge","leftEdge",0);
    RooRealVar* rightEdge = new RooRealVar("rightEdge","rightEdge",1);
    RooGenericPdf step("step", "step", "(@0 >= @1) && (@0 < @2)", RooArgList(*raa3, *leftEdge, *rightEdge));
@@ -115,8 +115,8 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    RooAbsPdf* LSBackground_hi = ws->pdf("nbkg_hi_nom");
    RooRealVar* nsig1_hi = ws->var("N_{#Upsilon(1S)}_hi");
    RooRealVar* nsig2_hi = ws->var("N_{#Upsilon(2S)}_hi");
-   cout << nsig1_hi << " " << nsig2_hi << " " << nsig3_pp << endl;
    RooFormulaVar* nsig3_hi = ws->function("nsig3_hi_modified");
+   cout << nsig1_hi << " " << nsig2_hi << " " << nsig3_pp << endl;
    RooRealVar* norm_nbkg_hi = ws->var("n_{Bkgd}_hi");
 
    RooArgList pdfs_hi( *sig1S_hi,*sig2S_hi,*sig3S_hi, *LSBackground_hi);
@@ -229,7 +229,6 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    ws->var("nbkg_hi_kappa")->setConstant(true);
    ws->var("nbkg_pp_kappa")->setConstant(true);
    ws->var("npow")->setConstant(true);
-   ws->var("N_{#Upsilon(3S)}_pp")->setConstant(true);
    // ws->var("raa3")->setConstant(true);
    ws->var("rightEdge")->setConstant(true);
    ws->var("sigmaFraction_hi")->setConstant(true);
@@ -304,6 +303,7 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    cpoi->cd(); framepoi->Draw();
    cpoi->SaveAs("cpoi.pdf");
 
+   ((RooRealVar *)poi.first())->setMin(0.);
    RooArgSet * pPoiAndNuisance = new RooArgSet("poiAndNuisance");
    // pPoiAndNuisance->add(*sbHypo.GetNuisanceParameters());
    // pPoiAndNuisance->add(*sbHypo.GetParametersOfInterest());
