@@ -34,14 +34,14 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
 
    // get a first estimate of where to look
 
-   ProfileLikelihoodCalculator pl(*data,*pdf,*theVar);
+   ProfileLikelihoodCalculator pl(*data,*sbHypo,1.-CI);
    cout << data << " " << pdf << " " << theVar << endl;
    pl.SetConfidenceLevel(CI); 
    int ci = 100*CI;
    LikelihoodInterval* interval = pl.GetInterval();
    LikelihoodIntervalPlot plot(interval);
    TCanvas c4; c4.cd(); 
-   plot.SetRange(0.,0.,0.05,3.);
+   plot.SetRange(0.,0.2,0.05,3.);
    // plot.Draw();
    TLatex latexCI;
    latexCI.SetNDC();
@@ -54,12 +54,18 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    cout <<endl<< CI <<"\% interval on " <<theVar->GetName()<<" is : ["<<
       interval->LowerLimit(*theVar) << ", "<<
       interval->UpperLimit(*theVar) << "] "<<endl;
-   of << 100.*CI << "% CL confidence interval from a likelihood scan on " << poiname << endl;
-   of << interval->LowerLimit(*theVar) << " " << interval->UpperLimit(*theVar) << endl;
    pair<double, double> CnfdncIntrvl;
    CnfdncIntrvl.first  = interval->LowerLimit(*theVar);
    CnfdncIntrvl.second = interval->UpperLimit(*theVar);
    c4.SaveAs("ULtest.pdf");
+
+   // pair<double, double> CnfdncIntrvl;
+   // CnfdncIntrvl.first  = theVar->getVal()+theVar->getErrorLo();
+   // CnfdncIntrvl.second = theVar->getVal()+theVar->getErrorHi();
+
+
+   of << 100.*CI << "% CL confidence interval from a likelihood scan on " << poiname << endl;
+   of << CnfdncIntrvl.first << " " << CnfdncIntrvl.second << endl;
 
    // now let's move to the hypo test inverter
    /////////////////////////////////////////////////////////////
