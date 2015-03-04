@@ -1,8 +1,37 @@
 #!/bin/bash
 
-for cat in dimuPt0005000_dimuY000120 dimuPt0005000_dimuY120240 dimuPt000500_dimuY000240 dimuPt12002000_dimuY000240 dimuPt5001200_dimuY000240; do 
-   root -l -b -q Raa2S_Workspace.C\(\"WS_pbpb_${cat}_fsr1_sigma0_ref2_fitres.root\"\,\"WS_pp_${cat}_fsr1_sigma0_ref2_fitres.root\"\,\"WS_combo2S_${cat}_fsr1_sigma0_ref2_fitres.root\"\)
-   mv c1.pdf c1_${cat}.pdf
-   mv c2.pdf c2_${cat}.pdf
-   mv cpoi.pdf cpoi_${cat}.pdf
+# dir
+dir=ws_2S_04mar2015/
+
+# pt fits
+dir2=$dir/ptFits
+for cat in dimuPt000500 dimuPt12002000 dimuPt5001200; do 
+   ppfile=$dir2/WS*pp*$cat*root
+   pbpbfile=$dir2/WS*pbpb*$cat*root
+   root -l -b -q Raa2S_Workspace.C\(\"${pbpbfile}\"\,\"${ppfile}\"\,\"$dir2/WS_combo2S_${cat}.root\"\)
+   mv c1.pdf $dir2/c1_${cat}.pdf
+   mv c2.pdf $dir2/c2_${cat}.pdf
+   mv cpoi.pdf $dir2/cpoi_${cat}.pdf
+done
+
+# rapidity fits
+dir2=$dir/rapidityFits
+for cat in dimuY000120 dimuY120240; do 
+   ppfile=$dir2/WS*pp*$cat*root
+   pbpbfile=$dir2/WS*pbpb*$cat*root
+   root -l -b -q Raa2S_Workspace.C\(\"${pbpbfile}\"\,\"${ppfile}\"\,\"$dir2/WS_combo2S_${cat}.root\"\)
+   mv c1.pdf $dir2/c1_${cat}.pdf
+   mv c2.pdf $dir2/c2_${cat}.pdf
+   mv cpoi.pdf $dir2/cpoi_${cat}.pdf
+done
+
+# rapidity fits
+dir2=$dir/centralityFits
+for cat in cent0M5 cent5M10 cent10M20 cent20M30 cent30M40 cent40M50 cent50M100; do 
+   ppfile=$dir2/WS*pp*root
+   pbpbfile=$dir2/WS*pbpb*$cat*root
+   root -l -b -q Raa2S_Workspace.C\(\"${pbpbfile}\"\,\"${ppfile}\"\,\"$dir2/WS_combo2S_${cat}.root\"\)
+   mv c1.pdf $dir2/c1_${cat}.pdf
+   mv c2.pdf $dir2/c2_${cat}.pdf
+   mv cpoi.pdf $dir2/cpoi_${cat}.pdf
 done

@@ -59,8 +59,18 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
 
    //pp Luminosities, Taa and efficiency ratios Systematics
 
-   ws->factory( "Taa_hi[5.662e-9]" );
-   ws->factory( "Taa_kappa[1.062]" ); // was 1.057
+   double Taa_hi=5.66e-9, Taa_kappa=0.35e-9;
+   if (sfname.find("cent0M5")!=string::npos) {Taa_hi=25.9e-9; Taa_kappa=1.1e-9;}
+   else if (sfname.find("cent5M10")!=string::npos) {Taa_hi=20.5e-9; Taa_kappa=0.9e-9;}
+   else if (sfname.find("cent10M20")!=string::npos) {Taa_hi=14.5e-9; Taa_kappa=0.76e-9;}
+   else if (sfname.find("cent20M30")!=string::npos) {Taa_hi=8.78e-9; Taa_kappa=0.58e-9;}
+   else if (sfname.find("cent30M40")!=string::npos) {Taa_hi=5.09e-9; Taa_kappa=0.43e-9;}
+   else if (sfname.find("cent40M50")!=string::npos) {Taa_hi=2.75e-9; Taa_kappa=0.30e-9;}
+   else if (sfname.find("cent50M100")!=string::npos) {Taa_hi=0.486e-9; Taa_kappa=0.073e-9;}
+   Taa_kappa=Taa_kappa/Taa_hi;
+
+   ws->factory( Form("Taa_hi[%f]",Taa_hi) );
+   ws->factory( Form("Taa_kappa[%f]",Taa_kappa) ); // was 1.057
    ws->factory( "expr::alpha_Taa('pow(Taa_kappa,beta_Taa)',Taa_kappa,beta_Taa[0,-5,5])" );
    ws->factory( "prod::Taa_nom(Taa_hi,alpha_Taa)" );
    ws->factory( "Gaussian::constr_Taa(beta_Taa,glob_Taa[0,-5,5],1)" );
@@ -73,14 +83,31 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
 
    // ws->factory( "effRat1[1]" );
    // ws->factory( "effRat2[1]" );
-   double effRat2value=0.953; // default value from MB
+
+   // double effRat2value=0.205/0.215; // default value from MB (tight cuts)
+   double effRat2value=0.276/0.299; // default value from MB (loose cuts)
+
    // what is the value of the efficiency ratio? try to guess from the input file name
    string sfname(name_pbpb);
-   if (sfname.find("dimuPt0005000_dimuY000120")!=string::npos) effRat2value=0.919;
-   else if (sfname.find("dimuPt000500_dimuY000240")!=string::npos) effRat2value=0.941;
-   else if (sfname.find("dimuPt5001200_dimuY000240")!=string::npos) effRat2value=0.973;
-   else if (sfname.find("dimuPt0005000_dimuY120240")!=string::npos) effRat2value=1.;
-   else if (sfname.find("dimuPt12002000_dimuY000240")!=string::npos) effRat2value=0.994;
+   // tight cuts
+   // if (sfname.find("dimuY000120")!=string::npos) effRat2value=0.228/0.248;
+   // else if (sfname.find("dimuPt000500")!=string::npos) effRat2value=0.208/0.221;
+   // else if (sfname.find("dimuPt5001200")!=string::npos) effRat2value=0.181/0.186;
+   // else if (sfname.find("dimuY120240")!=string::npos) effRat2value=0.175/0.175;
+   // else if (sfname.find("dimuPt12002000")!=string::npos) effRat2value=0.361/0.363;
+   // loose cuts
+   if (sfname.find("dimuY000120")!=string::npos) effRat2value=0.307/0.345;
+   else if (sfname.find("dimuPt000500")!=string::npos) effRat2value=0.290/0.318;
+   else if (sfname.find("dimuPt5001200")!=string::npos) effRat2value=0.231/0.244;
+   else if (sfname.find("dimuY120240")!=string::npos) effRat2value=0.238/0.242;
+   else if (sfname.find("dimuPt12002000")!=string::npos) effRat2value=0.394/0.401;
+   else if (sfname.find("cent0M5")!=string::npos) effRat2value=0.265/0.299;
+   else if (sfname.find("cent5M10")!=string::npos) effRat2value=0.278/0.299;
+   else if (sfname.find("cent10M20")!=string::npos) effRat2value=0.279/0.299;
+   else if (sfname.find("cent20M30")!=string::npos) effRat2value=0.285/0.299;
+   else if (sfname.find("cent30M40")!=string::npos) effRat2value=0.286/0.299;
+   else if (sfname.find("cent40M50")!=string::npos) effRat2value=0.288/0.299;
+   else if (sfname.find("cent50M100")!=string::npos) effRat2value=0.291/0.299;
 
    ws->factory( Form("effRat2_hi[%f]",effRat2value) );
    ws->factory( "effRat_kappa[1.054]" );
@@ -89,8 +116,16 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    ws->factory( "Gaussian::constr_effRat(beta_effRat,glob_effRat[0,-5,5],1)" );
    ws->factory( "prod::effRat2_nom(effRat2_hi,alpha_effRat)" );
    // ws->factory( "prod::effRat3_nom(effRat3_hi,alpha_effRat)" );
-   //  
-   ws->factory("Nmb_hi[1.161e9]");
+   
+   double centFrac=1.;
+   if (sfname.find("cent0M5")!=string::npos) centFrac=5e-2;
+   else if (sfname.find("cent5M10")!=string::npos) centFrac=5e-2;
+   else if (sfname.find("cent10M20")!=string::npos) centFrac=10e-2;
+   else if (sfname.find("cent20M30")!=string::npos) centFrac=10e-2;
+   else if (sfname.find("cent30M40")!=string::npos) centFrac=10e-2;
+   else if (sfname.find("cent40M50")!=string::npos) centFrac=10e-2;
+   else if (sfname.find("cent50M100")!=string::npos) centFrac=50e-2;
+   ws->factory(Form("Nmb_hi[%f]",1.161e9*centFrac));
    ws->factory("prod::denominator(Taa_nom,Nmb_hi)");
    ws->factory( "expr::lumiOverTaaNmbmodified('lumipp_nom/denominator',lumipp_nom,denominator)");
    RooFormulaVar *lumiOverTaaNmbmodified = ws->function("lumiOverTaaNmbmodified");
