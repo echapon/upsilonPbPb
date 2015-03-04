@@ -334,7 +334,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    /////////////////////////////////////////////////////////////////////
    RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data,NumCPU(25) );
    RooMinuit(*pNll).migrad(); // minimize likelihood wrt all parameters before making plots
-   RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.2),Title("LL and profileLL in raa2"));
+   RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.3),Title("LL and profileLL in raa2"));
    pNll->plotOn(framepoi,ShiftToZero());
    
    RooAbsReal * pProfile = pNll->createProfile( globalObs ); // do not profile global observables
@@ -371,7 +371,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    RooStats::ModelConfig bHypo = sbHypo;
    bHypo.SetName("BHypo");
    bHypo.SetWorkspace(*ws);
-   pNll = bHypo.GetPdf()->createNLL( *data,NumCPU(2) );
+   pNll = bHypo.GetPdf()->createNLL( *data,NumCPU(25) );
    RooArgSet poiAndGlobalObs("poiAndGlobalObs");
    poiAndGlobalObs.add( poi );
    poiAndGlobalObs.add( globalObs );
