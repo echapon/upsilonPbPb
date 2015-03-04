@@ -104,13 +104,14 @@ RooWorkspace* test_combine(const char* name_pbpb="fitresult.root", const char* n
    RooSimultaneous* simPdf = buildSimPdf(*wcombo,dataCat);
    wcombo->Print();
 
-   RooFitResult* fit_2nd;// fit results
-   fit_2nd = simPdf->fitTo(data_combo,
-         // RooFit::Constrained(),
-         RooFit::Save(kTRUE),
-         RooFit::Extended(kTRUE),
-         RooFit::Minos(kTRUE),
-         RooFit::NumCPU(4));
+   // not sure this is really needed since we will fit again in the later workspace creation
+   // RooFitResult* fit_2nd;// fit results
+   // fit_2nd = simPdf->fitTo(data_combo,
+   //       // RooFit::Constrained(),
+   //       RooFit::Save(kTRUE),
+   //       RooFit::Extended(kTRUE),
+   //       RooFit::Minos(kTRUE),
+   //       RooFit::NumCPU(25));
 
 
    // fix all other variables in model:
