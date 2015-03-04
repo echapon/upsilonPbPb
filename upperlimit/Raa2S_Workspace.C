@@ -332,7 +332,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
 
    // ws->Print();
    /////////////////////////////////////////////////////////////////////
-   RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data,NumCPU(2) );
+   RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data,NumCPU(25) );
    RooMinuit(*pNll).migrad(); // minimize likelihood wrt all parameters before making plots
    RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.2),Title("LL and profileLL in raa2"));
    pNll->plotOn(framepoi,ShiftToZero());
