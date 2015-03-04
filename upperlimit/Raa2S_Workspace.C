@@ -60,6 +60,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    //pp Luminosities, Taa and efficiency ratios Systematics
 
    double Taa_hi=5.66e-9, Taa_kappa=0.35e-9;
+   string sfname(name_pbpb);
    if (sfname.find("cent0M5")!=string::npos) {Taa_hi=25.9e-9; Taa_kappa=1.1e-9;}
    else if (sfname.find("cent5M10")!=string::npos) {Taa_hi=20.5e-9; Taa_kappa=0.9e-9;}
    else if (sfname.find("cent10M20")!=string::npos) {Taa_hi=14.5e-9; Taa_kappa=0.76e-9;}
@@ -69,8 +70,8 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    else if (sfname.find("cent50M100")!=string::npos) {Taa_hi=0.486e-9; Taa_kappa=0.073e-9;}
    Taa_kappa=Taa_kappa/Taa_hi;
 
-   ws->factory( Form("Taa_hi[%f]",Taa_hi) );
-   ws->factory( Form("Taa_kappa[%f]",Taa_kappa) ); // was 1.057
+   ws->factory( Form("Taa_hi[%e]",Taa_hi) );
+   ws->factory( Form("Taa_kappa[%e]",Taa_kappa) ); // was 1.057
    ws->factory( "expr::alpha_Taa('pow(Taa_kappa,beta_Taa)',Taa_kappa,beta_Taa[0,-5,5])" );
    ws->factory( "prod::Taa_nom(Taa_hi,alpha_Taa)" );
    ws->factory( "Gaussian::constr_Taa(beta_Taa,glob_Taa[0,-5,5],1)" );
@@ -88,7 +89,6 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    double effRat2value=0.276/0.299; // default value from MB (loose cuts)
 
    // what is the value of the efficiency ratio? try to guess from the input file name
-   string sfname(name_pbpb);
    // tight cuts
    // if (sfname.find("dimuY000120")!=string::npos) effRat2value=0.228/0.248;
    // else if (sfname.find("dimuPt000500")!=string::npos) effRat2value=0.208/0.221;
@@ -109,7 +109,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    else if (sfname.find("cent40M50")!=string::npos) effRat2value=0.288/0.299;
    else if (sfname.find("cent50M100")!=string::npos) effRat2value=0.291/0.299;
 
-   ws->factory( Form("effRat2_hi[%f]",effRat2value) );
+   ws->factory( Form("effRat2_hi[%e]",effRat2value) );
    ws->factory( "effRat_kappa[1.054]" );
    ws->factory( "expr::alpha_effRat('pow(effRat_kappa,beta_effRat)',effRat_kappa,beta_effRat[0,-5,5])" );
    // ws->factory( "prod::effRat1_nom(effRat1_hi,alpha_effRat)" );
@@ -125,7 +125,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    else if (sfname.find("cent30M40")!=string::npos) centFrac=10e-2;
    else if (sfname.find("cent40M50")!=string::npos) centFrac=10e-2;
    else if (sfname.find("cent50M100")!=string::npos) centFrac=50e-2;
-   ws->factory(Form("Nmb_hi[%f]",1.161e9*centFrac));
+   ws->factory(Form("Nmb_hi[%e]",1.161e9*centFrac));
    ws->factory("prod::denominator(Taa_nom,Nmb_hi)");
    ws->factory( "expr::lumiOverTaaNmbmodified('lumipp_nom/denominator',lumipp_nom,denominator)");
    RooFormulaVar *lumiOverTaaNmbmodified = ws->function("lumiOverTaaNmbmodified");
