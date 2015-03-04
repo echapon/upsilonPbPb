@@ -3,6 +3,9 @@ For the 2S:
 - first run run_2S_ws.sh to make the workspaces with combined pp-pbpb
 - then run run_2S_limit.sh to make the limits. To be ran on LLR's polui01 to benefit from the 32 cores (see nworkers = 25 in StandardHypoTestInvDemo.c)
 
+If you wish to compute 68% CL limits instead of the default 95%, be careful that you need to change the setting in TWO places:
+- in runLimit_RaaNS_Workspace.C: double CI = 0.xx;
+- in StandardHypoTestInvDemo.C: calc.SetConfidenceLevel(0.xx);
 
 
 
