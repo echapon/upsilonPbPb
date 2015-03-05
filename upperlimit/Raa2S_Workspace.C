@@ -68,7 +68,7 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    else if (sfname.find("cent30M40")!=string::npos) {Taa_hi=5.09e-9; Taa_kappa=0.43e-9;}
    else if (sfname.find("cent40M50")!=string::npos) {Taa_hi=2.75e-9; Taa_kappa=0.30e-9;}
    else if (sfname.find("cent50M100")!=string::npos) {Taa_hi=0.486e-9; Taa_kappa=0.073e-9;}
-   Taa_kappa=Taa_kappa/Taa_hi;
+   Taa_kappa=1.+Taa_kappa/Taa_hi;
 
    ws->factory( Form("Taa_hi[%e]",Taa_hi) );
    ws->factory( Form("Taa_kappa[%e]",Taa_kappa) ); // was 1.057
