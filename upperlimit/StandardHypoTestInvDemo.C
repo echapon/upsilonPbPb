@@ -905,7 +905,7 @@ RooStats::HypoTestInvTool::RunInverter(RooWorkspace * w,
   
   
    HypoTestInverter calc(*hc);
-   calc.SetConfidenceLevel(0.95);
+   calc.SetConfidenceLevel(0.68);
   
   
    calc.UseCLs(useCLs);

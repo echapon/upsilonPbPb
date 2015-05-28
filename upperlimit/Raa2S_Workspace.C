@@ -34,7 +34,7 @@
 using namespace RooFit;
 using namespace RooStats;
 
-void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root", const char* name_out="fitresult_combo.root"){
+void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root", const char* name_out="fitresult_combo.root", bool noSystematics=false){
 
    // TFile File(filename);
 
@@ -85,29 +85,29 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    // ws->factory( "effRat1[1]" );
    // ws->factory( "effRat2[1]" );
 
-   // double effRat2value=0.205/0.215; // default value from MB (tight cuts)
-   double effRat2value=0.276/0.299; // default value from MB (loose cuts)
+   double effRat2value=0.205/0.215; // default value from MB (tight cuts)
+   // double effRat2value=0.276/0.299; // default value from MB (loose cuts)
 
    // what is the value of the efficiency ratio? try to guess from the input file name
    // tight cuts
-   // if (sfname.find("dimuY000120")!=string::npos) effRat2value=0.228/0.248;
-   // else if (sfname.find("dimuPt000500")!=string::npos) effRat2value=0.208/0.221;
-   // else if (sfname.find("dimuPt5001200")!=string::npos) effRat2value=0.181/0.186;
-   // else if (sfname.find("dimuY120240")!=string::npos) effRat2value=0.175/0.175;
-   // else if (sfname.find("dimuPt12002000")!=string::npos) effRat2value=0.361/0.363;
+   if (sfname.find("dimuY000120")!=string::npos) effRat2value=0.228/0.248;
+   else if (sfname.find("dimuPt000500")!=string::npos) effRat2value=0.208/0.221;
+   else if (sfname.find("dimuPt5001200")!=string::npos) effRat2value=0.181/0.186;
+   else if (sfname.find("dimuY120240")!=string::npos) effRat2value=0.175/0.175;
+   else if (sfname.find("dimuPt12002000")!=string::npos) effRat2value=0.361/0.363;
    // loose cuts
-   if (sfname.find("dimuY000120")!=string::npos) effRat2value=0.307/0.345;
-   else if (sfname.find("dimuPt000500")!=string::npos) effRat2value=0.290/0.318;
-   else if (sfname.find("dimuPt5001200")!=string::npos) effRat2value=0.231/0.244;
-   else if (sfname.find("dimuY120240")!=string::npos) effRat2value=0.238/0.242;
-   else if (sfname.find("dimuPt12002000")!=string::npos) effRat2value=0.394/0.401;
-   else if (sfname.find("cent0M5")!=string::npos) effRat2value=0.265/0.299;
-   else if (sfname.find("cent5M10")!=string::npos) effRat2value=0.278/0.299;
-   else if (sfname.find("cent10M20")!=string::npos) effRat2value=0.279/0.299;
-   else if (sfname.find("cent20M30")!=string::npos) effRat2value=0.285/0.299;
-   else if (sfname.find("cent30M40")!=string::npos) effRat2value=0.286/0.299;
-   else if (sfname.find("cent40M50")!=string::npos) effRat2value=0.288/0.299;
-   else if (sfname.find("cent50M100")!=string::npos) effRat2value=0.291/0.299;
+   // if (sfname.find("dimuY000120")!=string::npos) effRat2value=0.307/0.345;
+   // else if (sfname.find("dimuPt000500")!=string::npos) effRat2value=0.290/0.318;
+   // else if (sfname.find("dimuPt5001200")!=string::npos) effRat2value=0.231/0.244;
+   // else if (sfname.find("dimuY120240")!=string::npos) effRat2value=0.238/0.242;
+   // else if (sfname.find("dimuPt12002000")!=string::npos) effRat2value=0.394/0.401;
+   // else if (sfname.find("cent0M5")!=string::npos) effRat2value=0.265/0.299;
+   // else if (sfname.find("cent5M10")!=string::npos) effRat2value=0.278/0.299;
+   // else if (sfname.find("cent10M20")!=string::npos) effRat2value=0.279/0.299;
+   // else if (sfname.find("cent20M30")!=string::npos) effRat2value=0.285/0.299;
+   // else if (sfname.find("cent30M40")!=string::npos) effRat2value=0.286/0.299;
+   // else if (sfname.find("cent40M50")!=string::npos) effRat2value=0.288/0.299;
+   // else if (sfname.find("cent50M100")!=string::npos) effRat2value=0.291/0.299;
 
    ws->factory( Form("effRat2_hi[%e]",effRat2value) );
    ws->factory( "effRat_kappa[1.054]" );
@@ -207,11 +207,14 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    ws->var("glob_nbkg_pp")->setConstant(true);
    ws->var("glob_nbkg_hi")->setConstant(true);
    RooArgSet globalObs("global_obs");
-   globalObs.add( *ws->var("glob_lumipp") );
-   globalObs.add( *ws->var("glob_Taa") );
-   globalObs.add( *ws->var("glob_effRat") );
-   globalObs.add( *ws->var("glob_nbkg_hi") );
-   globalObs.add( *ws->var("glob_nbkg_pp") );
+   if (!noSystematics)
+   {
+      globalObs.add( *ws->var("glob_lumipp") );
+      globalObs.add( *ws->var("glob_Taa") );
+      globalObs.add( *ws->var("glob_effRat") );
+      globalObs.add( *ws->var("glob_nbkg_hi") );
+      globalObs.add( *ws->var("glob_nbkg_pp") );
+   }
 
    // ws->Print();
 
@@ -222,11 +225,22 @@ void Raa2S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
 
    // create set of nuisance parameters
    RooArgSet nuis("nuis");
-   nuis.add( *ws->var("beta_lumipp") );
-   nuis.add( *ws->var("beta_nbkg_hi") );
-   nuis.add( *ws->var("beta_nbkg_pp") );
-   nuis.add( *ws->var("beta_Taa") );
-   nuis.add( *ws->var("beta_effRat") );
+   if (!noSystematics)
+   {
+      nuis.add( *ws->var("beta_lumipp") );
+      nuis.add( *ws->var("beta_nbkg_hi") );
+      nuis.add( *ws->var("beta_nbkg_pp") );
+      nuis.add( *ws->var("beta_Taa") );
+      nuis.add( *ws->var("beta_effRat") );
+   }
+   else
+   {
+      ws->var("beta_lumipp")->setConstant(true);
+      ws->var("beta_nbkg_hi")->setConstant(true);
+      ws->var("beta_nbkg_pp")->setConstant(true);
+      ws->var("beta_Taa")->setConstant(true);
+      ws->var("beta_effRat")->setConstant(true);
+   }
 
    ws->var("#alpha_{CB}_hi")->setConstant(true);
    ws->var("#alpha_{CB}_pp")->setConstant(true);

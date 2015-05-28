@@ -51,7 +51,7 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    // ws->import(* hi_data);
    // hi_data->Print();
 
-   RooRealVar* raa3 = new RooRealVar("raa3","R_{AA}(#Upsilon (3S))",0.5,-1,1);
+   RooRealVar* raa3 = new RooRealVar("raa3","R_{AA}( #varUpsilon (3S))",0.5,-1,1);
    RooRealVar* leftEdge = new RooRealVar("leftEdge","leftEdge",0);
    RooRealVar* rightEdge = new RooRealVar("rightEdge","rightEdge",1);
    RooGenericPdf step("step", "step", "(@0 >= @1) && (@0 < @2)", RooArgList(*raa3, *leftEdge, *rightEdge));
@@ -93,7 +93,7 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    //  RooRealVar *raa2 = ws->var("raa2");
    //  RooRealVar* nsig2_pp = ws->var("nsig2_pp");
    //  RooRealVar* effRat2 = ws->function("effRat2_nom");
-   RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
+   RooRealVar* nsig3_pp = ws->var("N_{ #varUpsilon(3S)}_pp");
    cout << nsig3_pp << endl;
    RooRealVar* effRat3 = ws->function("effRat3_nom");
    //  
@@ -113,8 +113,8 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    RooAbsPdf* sig2S_hi = ws->pdf("sig2S_hi");
    RooAbsPdf* sig3S_hi = ws->pdf("sig3S_hi");
    RooAbsPdf* LSBackground_hi = ws->pdf("nbkg_hi_nom");
-   RooRealVar* nsig1_hi = ws->var("N_{#Upsilon(1S)}_hi");
-   RooRealVar* nsig2_hi = ws->var("N_{#Upsilon(2S)}_hi");
+   RooRealVar* nsig1_hi = ws->var("N_{ #varUpsilon(1S)}_hi");
+   RooRealVar* nsig2_hi = ws->var("N_{ #varUpsilon(2S)}_hi");
    RooFormulaVar* nsig3_hi = ws->function("nsig3_hi_modified");
    cout << nsig1_hi << " " << nsig2_hi << " " << nsig3_pp << endl;
    RooRealVar* norm_nbkg_hi = ws->var("n_{Bkgd}_hi");
@@ -132,9 +132,9 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    RooAbsPdf* sig2S_pp = ws->pdf("sig2S_pp");
    RooAbsPdf* sig3S_pp = ws->pdf("sig3S_pp");
    RooAbsPdf* LSBackground_pp = ws->pdf("nbkg_pp_nom");
-   RooRealVar* nsig1_pp = ws->var("N_{#Upsilon(1S)}_pp");
-   RooRealVar* nsig2_pp = ws->var("N_{#Upsilon(2S)}_pp");
-   // RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
+   RooRealVar* nsig1_pp = ws->var("N_{ #varUpsilon(1S)}_pp");
+   RooRealVar* nsig2_pp = ws->var("N_{ #varUpsilon(2S)}_pp");
+   // RooRealVar* nsig3_pp = ws->var("N_{ #varUpsilon(3S)}_pp");
    RooRealVar* norm_nbkg_pp = ws->var("n_{Bkgd}_pp");
 
    RooArgList pdfs_pp( *sig1S_pp,*sig2S_pp,*sig3S_pp, *LSBackground_pp);
@@ -192,11 +192,11 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    ws->var("#sigma_{CB2}/#sigma_{CB1}_hi")->setConstant(true);
    ws->var("#sigma_{CB2}/#sigma_{CB1}_pp")->setConstant(true);
    ws->var("Centrality")->setConstant(true);
-   ws->var("N_{#Upsilon(1S)}_hi")->setConstant(true);
-   ws->var("N_{#Upsilon(1S)}_pp")->setConstant(true);
-   ws->var("N_{#Upsilon(2S)}_hi")->setConstant(true);
-   ws->var("N_{#Upsilon(2S)}_pp")->setConstant(true);
-   ws->var("N_{#Upsilon(3S)}_pp")->setConstant(true);
+   ws->var("N_{ #varUpsilon(1S)}_hi")->setConstant(true);
+   ws->var("N_{ #varUpsilon(1S)}_pp")->setConstant(true);
+   ws->var("N_{ #varUpsilon(2S)}_hi")->setConstant(true);
+   ws->var("N_{ #varUpsilon(2S)}_pp")->setConstant(true);
+   ws->var("N_{ #varUpsilon(3S)}_pp")->setConstant(true);
    ws->var("Nmb_hi")->setConstant(true);
    // ws->var("QQsign")->setConstant(true);
    ws->var("Taa_hi")->setConstant(true);
@@ -220,15 +220,15 @@ void Raa3S_Workspace(const char* name_pbpb="fitresult.root", const char* name_pp
    ws->var("leftEdge")->setConstant(true);
    ws->var("lumipp_hi")->setConstant(true);
    ws->var("lumipp_kappa")->setConstant(true);
-   ws->var("mass1S_hi")->setConstant(true);
-   ws->var("mass1S_pp")->setConstant(true);
+   ws->var("m_{ #varUpsilon(1S)}_hi")->setConstant(true);
+   ws->var("m_{ #varUpsilon(1S)}_pp")->setConstant(true);
    ws->var("muMinusPt")->setConstant(true);
    ws->var("muPlusPt")->setConstant(true);
    ws->var("n_{Bkgd}_hi")->setConstant(true);
    ws->var("n_{Bkgd}_pp")->setConstant(true);
    ws->var("nbkg_hi_kappa")->setConstant(true);
    ws->var("nbkg_pp_kappa")->setConstant(true);
-   ws->var("npow")->setConstant(true);
+   ws->var("n_{CB}")->setConstant(true);
    // ws->var("raa3")->setConstant(true);
    ws->var("rightEdge")->setConstant(true);
    ws->var("sigmaFraction_hi")->setConstant(true);

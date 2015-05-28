@@ -4,7 +4,7 @@ void runLimit_RaaNS_Workspace(const char *filename="TRIAL.root", const char *poi
 
 #include "StandardHypoTestInvDemo.C"
 
-double CI = 0.95;
+double CI = 0.68;
 
 void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const char *pdfname, const char *wsname)
 {
